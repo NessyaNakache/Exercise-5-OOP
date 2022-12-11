@@ -16,7 +16,7 @@ public class DataSource {
     public static List<Product> allProducts;
     public static List<OrderProduct> allOrderProducts;
     // Update this path according to your data files location
-    public static String basePath = "data/Ex05IBL/";
+    public static String basePath = "C:\\Users\\Admin\\source\\repos\\github";
     public static String customersPath = basePath +"customers.txt";
     public static String ordersPath = basePath +"orders.txt";
     public static String productsPath = basePath +"products.txt";
@@ -38,7 +38,9 @@ public class DataSource {
 
     public static List<Order> readOrdersfromFile() throws IOException {
         try {
-            allOrders = Files.lines(Paths.get(ordersPath)).map(l -> new Order(l)).collect(Collectors.toList());
+            allOrders = Files.lines(Paths.get(ordersPath))
+                    .map(l -> new Order(l))
+                    .collect(Collectors.toList());
         }
         catch(Throwable exception){}
 

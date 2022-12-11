@@ -21,7 +21,7 @@ public class BL implements IBL {
     @Override
     public Order getOrderById(long orderId) {
         return allOrders.stream()
-                .filter(op -> op.getOrderId() == orderId)
+                .filter(o -> o.getOrderId() == orderId)
                 .findAny()
                 .orElse(null);
     }
@@ -48,7 +48,7 @@ public class BL implements IBL {
     @Override
     public List<Order> getCustomerOrders(long customerId) {
         return allOrders.stream()
-                .filter(op -> op.getCustomrId() == customerId)
+                .filter(co -> co.getCustomrId() == customerId)
                 .collect(Collectors.toList());
     }
 
@@ -64,27 +64,14 @@ public class BL implements IBL {
         return null;
     }
 
-    //gotta connect order product to product thru ids but dont know how to
     @Override
     public List<Product> getOrderProducts(long orderId)
     {
-//        List<OrderProduct> orderProducts = allOrderProducts.stream()
-//                .filter(op -> op.getOrderId() == orderId)
-//                .collect(Collectors.toList());
-//
-//        List<Product> result;
-//        long OId;
-//
-//        for (int i = 0; i < orderProducts.size(); i++) {
-//            OId = orderProducts.get(i).getProductId();
-//            result = allProducts.stream()
-//                    .filter(p -> p.getProductId() == OId)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        return result;
-
-        return null;
+        return allOrderProducts.stream()
+                .filter(op -> op.getOrderId() == orderId)
+                .sorted(Comparator.comparing(OrderProduct::getProductId))
+                .map(op -> getProductById(op.getProductId()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,12 +80,15 @@ public class BL implements IBL {
         return null;
     }
 
+    //work on that
     @Override
     public Product getMaxOrderedProduct() {
         //To do
         return null;
 
     }
+
+    //rework
     @Override
     public double sumOfOrder(long orderID) {
         return allOrders.stream()
@@ -106,6 +96,7 @@ public class BL implements IBL {
                 .count();
     }
 
+    //rework
     @Override
     public List<Order> getExpensiveOrders(double price) {
         return allOrders.stream()
