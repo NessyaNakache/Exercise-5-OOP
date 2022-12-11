@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static Programming5.DataSource.*;
 import static java.util.Collections.reverseOrder;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.*;
+import static jdk.jshell.Util.stream;
 
 public class BL implements IBL {
     @Override
@@ -19,8 +21,10 @@ public class BL implements IBL {
 
     @Override
     public Order getOrderById(long orderId) {
-        //To do
-        return null;
+        return allOrders.stream()
+                .filter(op -> op.getOrderId().equals(orderId))
+                .findAny()
+                .orElse(null);
     }
 
     @Override
@@ -44,8 +48,9 @@ public class BL implements IBL {
 
     @Override
     public List<Order> getCustomerOrders(long customerId) {
-        //To do
-        return null;
+        return allOrders.stream()
+                .filter(op -> op.getCustomrId().equals(customerId))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -60,11 +65,25 @@ public class BL implements IBL {
         return null;
     }
 
+    //gotta connect order product to product thru ids but dont know how to
     @Override
     public List<Product> getOrderProducts(long orderId)
     {
-        //To do
-        return null;
+        List<OrderProduct> orderProducts = allOrderProducts.stream()
+                .filter(op -> op.getOrderId().equals(orderId))
+                .collect(Collectors.toList());
+
+        List<Product> result;
+        long OId;
+
+        for (int i = 0; i < orderProducts.size(); i++) {
+            OId = orderProducts.get(i).getProductId();
+            result = allProducts.stream()
+                    .filter(p -> p.getProductId().equals(OId))
+                    .collect(Collectors.toList());
+        }
+
+        return result;
     }
 
     @Override
@@ -81,14 +100,17 @@ public class BL implements IBL {
     }
     @Override
     public double sumOfOrder(long orderID) {
-        //To do
-        return 0;
+        return allOrders.stream()
+                .filter(op -> op.getOrderId().equals(orderID))
+                .collect(Collectors.toList())
+                .count();
     }
 
     @Override
     public List<Order> getExpensiveOrders(double price) {
-        //To do
-        return null;
+        return allOrders.stream()
+                .filter(o -> o.getOrderId().compareTo(price)>1)
+                .collect(Collectors.toList());
     }
 
     @Override

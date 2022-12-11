@@ -3,8 +3,10 @@ package Programming5;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class DataSource {
@@ -35,8 +37,18 @@ public class DataSource {
     }
 
     public static List<Order> readOrdersfromFile() throws IOException {
-        //To Do
-        return null;
+        List<String> SOrders;
+        try (Stream<String> lines = Files.lines(Paths.get(ordersPath))) {
+            SOrders = lines.collect(Collectors.toList());
+
+            for (int i = 0; i < SOrders.size(); i++) {
+                allOrders.add(new Order(SOrders.get(i)));
+            }
+
+            allOrders.stream().forEach(lines, l -> {new Order(l);}).collect(Collectors.toList());
+
+        }
+        return allOrders;
     }
 
     public static List<Product> readProductsfromFile() throws IOException {
@@ -45,8 +57,18 @@ public class DataSource {
     }
 
     public static List<OrderProduct> readOrderProductsfromFile() throws IOException {
-        //To Do
-        return null;
+        List<String> SOrderProducts;
+        try (Stream<String> lines = Files.lines(Paths.get(orderProductPath))) {
+            SOrderProducts = lines.collect(Collectors.toList());
+
+            for (int i = 0; i < SOrderProducts.size(); i++) {
+                allOrderProducts.add(new OrderProduct(SOrderProducts.get(i)));
+            }
+
+            allOrderProducts.stream().forEach(lines, l -> {new OrderProduct(l);}).collect(Collectors.toList());
+
+        }
+        return allOrderProducts;
     }
 }
 
