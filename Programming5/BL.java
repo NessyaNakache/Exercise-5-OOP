@@ -10,7 +10,6 @@ import static java.util.Collections.reverseOrder;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.*;
-import static jdk.jshell.Util.stream;
 
 public class BL implements IBL {
     @Override
@@ -22,7 +21,7 @@ public class BL implements IBL {
     @Override
     public Order getOrderById(long orderId) {
         return allOrders.stream()
-                .filter(op -> op.getOrderId().equals(orderId))
+                .filter(op -> op.getOrderId() == orderId)
                 .findAny()
                 .orElse(null);
     }
@@ -49,7 +48,7 @@ public class BL implements IBL {
     @Override
     public List<Order> getCustomerOrders(long customerId) {
         return allOrders.stream()
-                .filter(op -> op.getCustomrId().equals(customerId))
+                .filter(op -> op.getCustomrId() == customerId)
                 .collect(Collectors.toList());
     }
 
@@ -69,21 +68,23 @@ public class BL implements IBL {
     @Override
     public List<Product> getOrderProducts(long orderId)
     {
-        List<OrderProduct> orderProducts = allOrderProducts.stream()
-                .filter(op -> op.getOrderId().equals(orderId))
-                .collect(Collectors.toList());
+//        List<OrderProduct> orderProducts = allOrderProducts.stream()
+//                .filter(op -> op.getOrderId() == orderId)
+//                .collect(Collectors.toList());
+//
+//        List<Product> result;
+//        long OId;
+//
+//        for (int i = 0; i < orderProducts.size(); i++) {
+//            OId = orderProducts.get(i).getProductId();
+//            result = allProducts.stream()
+//                    .filter(p -> p.getProductId() == OId)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        return result;
 
-        List<Product> result;
-        long OId;
-
-        for (int i = 0; i < orderProducts.size(); i++) {
-            OId = orderProducts.get(i).getProductId();
-            result = allProducts.stream()
-                    .filter(p -> p.getProductId().equals(OId))
-                    .collect(Collectors.toList());
-        }
-
-        return result;
+        return null;
     }
 
     @Override
@@ -101,15 +102,14 @@ public class BL implements IBL {
     @Override
     public double sumOfOrder(long orderID) {
         return allOrders.stream()
-                .filter(op -> op.getOrderId().equals(orderID))
-                .collect(Collectors.toList())
+                .filter(op -> op.getOrderId() == orderID)
                 .count();
     }
 
     @Override
     public List<Order> getExpensiveOrders(double price) {
         return allOrders.stream()
-                .filter(o -> o.getOrderId().compareTo(price)>1)
+                .filter(o -> o.getOrderId() >= price)
                 .collect(Collectors.toList());
     }
 

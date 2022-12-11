@@ -37,18 +37,13 @@ public class DataSource {
     }
 
     public static List<Order> readOrdersfromFile() throws IOException {
-        List<String> SOrders;
-        try (Stream<String> lines = Files.lines(Paths.get(ordersPath))) {
-            SOrders = lines.collect(Collectors.toList());
-
-            for (int i = 0; i < SOrders.size(); i++) {
-                allOrders.add(new Order(SOrders.get(i)));
-            }
-
-            allOrders.stream().forEach(lines, l -> {new Order(l);}).collect(Collectors.toList());
-
+        try {
+            allOrders = Files.lines(Paths.get(ordersPath)).map(l -> new Order(l)).collect(Collectors.toList());
         }
+        catch(Throwable exception){}
+
         return allOrders;
+
     }
 
     public static List<Product> readProductsfromFile() throws IOException {
@@ -57,17 +52,11 @@ public class DataSource {
     }
 
     public static List<OrderProduct> readOrderProductsfromFile() throws IOException {
-        List<String> SOrderProducts;
-        try (Stream<String> lines = Files.lines(Paths.get(orderProductPath))) {
-            SOrderProducts = lines.collect(Collectors.toList());
-
-            for (int i = 0; i < SOrderProducts.size(); i++) {
-                allOrderProducts.add(new OrderProduct(SOrderProducts.get(i)));
-            }
-
-            allOrderProducts.stream().forEach(lines, l -> {new OrderProduct(l);}).collect(Collectors.toList());
-
+        try {
+            allOrderProducts = Files.lines(Paths.get(orderProductPath)).map(l -> new OrderProduct(l)).collect(Collectors.toList());
         }
+        catch(Throwable exception){}
+
         return allOrderProducts;
     }
 }
