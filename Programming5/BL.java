@@ -4,9 +4,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static Programming5.DataSource.*;
-//import static java.util.Collections.reverseOrder;
-//import static java.util.Map.Entry.comparingByValue;
-//import static java.util.function.UnaryOperator.identity;
+import static java.util.Collections.reverseOrder;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.*;
 
 public class BL implements IBL {
