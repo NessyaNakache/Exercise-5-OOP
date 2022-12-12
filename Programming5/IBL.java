@@ -10,6 +10,7 @@ public interface IBL {
     List<Customer> popularCustomers();
     List<Order>  getCustomerOrders(long customerId);
     long numberOfProductInOrder(long orderId);
+    double sumOfOrderedQuantities(long orderID);
     List<Product> getPopularOrderedProduct(int orderedtimes);
     List<Product> getOrderProducts(long orderId);
     List<Customer> getCustomersWhoOrderedProduct(long productId);
