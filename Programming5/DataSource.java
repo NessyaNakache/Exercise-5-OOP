@@ -32,8 +32,14 @@ public class DataSource {
         } catch (IOException e) { e.printStackTrace(); }
     }
     public static List<Customer> readCustomersfromFile() throws IOException {
-        //To Do
-        return null;
+        try {
+            allCustomers = Files.lines(Paths.get(customersPath))
+                .map(l -> new Customer(l))
+                .collect(Collectors.toList());
+        }
+        catch(Throwable exception){}
+
+        return allCustomers;
     }
 
     public static List<Order> readOrdersfromFile() throws IOException {
@@ -49,9 +55,15 @@ public class DataSource {
     }
 
     public static List<Product> readProductsfromFile() throws IOException {
-        //To Do
-        return null;
-    }
+        try {
+            allProducts = Files.lines(Paths.get(productsPath))
+                .map(l -> new Product(l))
+                .collect(Collectors.toList());
+        }
+        catch(Throwable exception){}
+
+        return allProducts;
+     }
 
     public static List<OrderProduct> readOrderProductsfromFile() throws IOException {
         try {
@@ -60,7 +72,7 @@ public class DataSource {
         catch(Throwable exception){}
 
         return allOrderProducts;
-    }
+     }
 }
 
 
