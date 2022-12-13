@@ -98,9 +98,12 @@ public class BL implements IBL {
     @Override
     public List<Customer> getCustomersWhoOrderedProduct(long productId) {
         return allCustomers.stream()//list of customers
-              .map(cus->getCustomerOrders(cus.getId())
-              .map(ord->getOrderProducts(ord.getOrderId())
-              .filter(
+              .filter(cus->getCustomerOrders(cus.getId()).stream()
+                     .findAny(ord->getOrderProducts(ord.getOrderId()).stream()
+                             .findAny(pr->getProductId()==productId)
+                     )
+                )
+                .collect(Collectors.toList());
     }
 
     @Override
