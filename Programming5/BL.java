@@ -28,20 +28,27 @@ public class BL implements IBL {
 
     @Override
     public Customer getCustomerById(long customerId) {
-        //To do
-        return null;
+           return allCustomers.stream()
+                .filter(cus -> cus.getCustomerId() == customerId)
+                .findAny()
+                .orElse(null);
     }
 
     @Override
     public List<Product> getProducts(ProductCategory cat, double price) {
-        //To do
-        return null;
+        return allProducts.stream().
+            filter(pro->pro.getCategory()==cat && pro.getPrice()<=price ).
+            sorted(Comparator.comparingInt(Product::getProductId)).
+            .collect(Collectors.toList());
     }
 
     @Override
     public List<Customer> popularCustomers() {
-        //To do
-        return null;
+      return allCustomers.stream().
+            filter(cus->cus.getTier()==3 &&
+                   cus->getCustomerOrders(cus.getId()).size()>=10).
+            sorted(Comparator.comparingInt(Customer::getId)).
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -53,8 +60,10 @@ public class BL implements IBL {
 
     @Override
     public long numberOfProductInOrder(long orderId) {
-        //To do
-        return 0;
+        return  getCustomerOrders(orderId).stream()
+            .map(ord->ord.getOrderId())
+            .distinct()
+            .count();
     }
 
     @Override
@@ -88,8 +97,10 @@ public class BL implements IBL {
 
     @Override
     public List<Customer> getCustomersWhoOrderedProduct(long productId) {
-        //To do
-        return null;
+        return allCustomers.stream()//list of customers
+              .map(cus->getCustomerOrders(cus.getId())
+              .map(ord->getOrderProducts(ord.getOrderId())
+              .filter(
     }
 
     @Override
