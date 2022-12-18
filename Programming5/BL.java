@@ -9,7 +9,10 @@ import static java.util.Map.Entry.comparingByValue;
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.*;
 
+
 public class BL implements IBL {
+
+
     @Override
     public Product getProductById(long productId) {
         return allProducts.stream()
@@ -29,7 +32,7 @@ public class BL implements IBL {
     @Override
     public Customer getCustomerById(long customerId) {
            return allCustomers.stream()
-                .filter(cus -> cus.getCustomerId() == customerId)
+                .filter(cus -> cus.getId() == customerId)
                 .findAny()
                 .orElse(null);
     }
@@ -38,16 +41,16 @@ public class BL implements IBL {
     public List<Product> getProducts(ProductCategory cat, double price) {
         return allProducts.stream().
             filter(pro->pro.getCategory()==cat && pro.getPrice()<=price ).
-            sorted(Comparator.comparingInt(Product::getProductId)).
+            sorted(Comparator.comparing(Product::getProductId))
             .collect(Collectors.toList());
     }
 
     @Override
     public List<Customer> popularCustomers() {
       return allCustomers.stream().
-            filter(cus->cus.getTier()==3 &&
-                   cus->getCustomerOrders(cus.getId()).size()>=10).
-            sorted(Comparator.comparingInt(Customer::getId)).
+            filter(cus->(cus.getTier()==3 &&
+                   getCustomerOrders(cus.getId()).size()>=10))
+              .sorted(Comparator.comparing(Customer::getId))
             .collect(Collectors.toList());
     }
 
@@ -97,12 +100,12 @@ public class BL implements IBL {
 
     @Override
     public List<Customer> getCustomersWhoOrderedProduct(long productId) {
-        return allCustomers.stream()//list of customers
-              .filter(cus->getCustomerOrders(cus.getId()).stream()
-                     .findAny(ord->getOrderProducts(ord.getOrderId()).stream()
-                             .findAny(pr->getProductId()==productId)
-                     )
-                )
+
+        return allOrderProducts.stream()
+                .filter(op -> op.getProductId() == productId)
+                .map(op->getOrderById(op.getOrderId()))
+                .map(cus -> getCustomerById(cus.getCustomrId()))
+                .distinct()
                 .collect(Collectors.toList());
     }
 
@@ -143,11 +146,14 @@ public class BL implements IBL {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Customer> ThreeTierCustomerWithMaxOrders() {
-        //To do
-        return null;
+        @Override
+        public List<Customer> ThreeTierCustomerWithMaxOrders() {
+            return allCustomers.stream()
+                    .sorted(Comparator.comparingInt(cus ->getCustomerOrders(cus.getId()).size()))
+                    .limit(3)
+                    .sorted(Comparator.comparing(Customer::getId))
+                    .collect(Collectors.toList());
 
-    }
+        }
 
 }
